@@ -301,7 +301,11 @@ void save_to_png() {
     int i;
     uint8_t pixels[width * height * 3];
     printf("PNG: started at %llu\n", get_time_us());
+    // switch the framebuffer in order to force the full texture to be saved
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffers[fb]);
+    glViewport(0, 0, width, height);
     // copy pixels from screen
+    glActiveTexture(0);
     glBindTexture(GL_TEXTURE_2D, textures[fb]);
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, width, height);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -344,7 +348,7 @@ void save_to_png() {
     png_destroy_write_struct(&png, &info);
     fclose(file);
     printf("PNG: finished at %llu\n", get_time_us());
-    
+    render_prepare_screen();
     return;
 png_fail:
     fail("Failed to create PNG\n");

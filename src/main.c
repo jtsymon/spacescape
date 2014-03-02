@@ -31,6 +31,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
     if (key == GLFW_KEY_S && action == GLFW_PRESS) {
         save_to_png();
+        // render_to_png();
     }
 }
 
