@@ -143,7 +143,7 @@ GLuint create_program(const char * vertex_file_path, const char * fragment_file_
 
 GLuint textures[2], framebuffers[2];
 GLuint quad_vertexbuffer;
-bool gen_starfield = true, gen_stars = true, gen_nebulae = true, gen_sun = false;
+bool gen_starfield = true, gen_stars = true, gen_nebulae = true, gen_sun = true;
 int width = 1920, height = 1080;
 int scale;
 int fb = 0;
@@ -296,8 +296,8 @@ void generate() {
                 (void*) 0 // array buffer offset
                 );
         
-        int n = 1;
-        while (rand() < RAND_MAX / 10) n++;
+        int n = rand() > RAND_MAX / 2 ? 1 : 0;
+        while (rand() < RAND_MAX / 20) n++;
         
         for(i = 0; i < n; i++) {
             set_framebuffer(&fb, program);
