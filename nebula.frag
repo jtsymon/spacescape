@@ -26,11 +26,21 @@ void main(void) {
     */
     float i = min(1, snoise(UV + seed) * intensity);
     vec3 source = texture2D(renderedTexture, UV).rgb;
-    color = vec3(
-        min(1, source.r + (colour.r * i)),
-        min(1, source.g + (colour.g * i)),
-        min(1, source.b + (colour.b * i))
-    );
+    if(i < 0.1) {
+        color = vec3(
+            min(1, (source.r) + (colour.r * i)),
+            min(1, (source.g) + (colour.g * i)),
+            min(1, (source.b) + (colour.b * i))
+        );
+    } else if(i < 0.9) {
+        color = vec3(
+            min(1, (source.r / (i * 10)) + (colour.r * i)),
+            min(1, (source.g / (i * 10)) + (colour.g * i)),
+            min(1, (source.b / (i * 10)) + (colour.b * i))
+        );
+    } else {
+        color = colour * i;
+    }
 }
 
 //

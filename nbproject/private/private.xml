@@ -8,10 +8,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/jts/git/spacescape/sun.frag</file>
+            <file>file:/home/jts/git/spacescape/pass_through.vert</file>
             <file>file:/home/jts/git/spacescape/screen.frag</file>
-            <file>file:/home/jts/git/spacescape/default.vert</file>
-            <file>file:/home/jts/git/spacescape/starfield.frag</file>
             <file>file:/home/jts/git/spacescape/star.frag</file>
+            <file>file:/home/jts/git/spacescape/nebula.frag</file>
             <file>file:/home/jts/git/spacescape/main.c</file>
         </group>
     </open-files>
