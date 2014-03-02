@@ -8,7 +8,7 @@ uniform sampler2D renderedTexture;
 uniform vec3 colour;
 uniform float intensity;
 uniform float falloff;
-uniform float seed;
+uniform vec4 seed;
 
 // Simplex Noise library included below
 float snoise(vec2 seed);
@@ -24,7 +24,10 @@ void main(void) {
     float i = min(1, field * intensity);
     i = pow(i, falloff);
     */
-    float i = min(1, snoise(UV + seed) * intensity);
+
+    // Horizontal glitch:
+    float i = min(1, snoise(UV + seed.x) * intensity + snoise(UV * seed.y) * 0.1 + snoise(UV * vec2(seed.z, seed.s)) * 0.1);
+    // i = snoise(UV * i);
     vec3 source = texture2D(renderedTexture, UV).rgb;
     if(i < 0.1) {
         color = vec3(
