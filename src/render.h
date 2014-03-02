@@ -9,6 +9,7 @@
 #define	RENDER_H
 
 #include <GL/glew.h>
+#include <png.h>
 
 #include "shader.h"
 #include "misc.h"
@@ -22,7 +23,9 @@ extern GLuint program_screen;
 
 extern void render_init();
 extern void render_cleanup();
-extern void render();
+extern void save_to_png();
+extern void render_to_png();
+extern void render_to_screen();
 
 #endif	/* RENDER_H */
 

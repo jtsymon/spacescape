@@ -56,7 +56,7 @@
         </cTool>
         <linkerTool>
           <commandlineTool>gcc</commandlineTool>
-          <commandLine>-lGL -lglfw -lGLEW -lm</commandLine>
+          <commandLine>-lGL -lglfw -lGLEW -lm -lpng</commandLine>
         </linkerTool>
       </compileType>
       <item path="shaders/nebula1.frag" ex="false" tool="3" flavor2="0">
@@ -108,7 +108,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <commandLine>-lGL -lglfw -lGLEW -lm</commandLine>
+          <commandLine>-lGL -lglfw -lGLEW -lm -lpng</commandLine>
         </linkerTool>
       </compileType>
       <item path="shaders/nebula1.frag" ex="false" tool="3" flavor2="0">

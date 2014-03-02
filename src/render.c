@@ -128,30 +128,30 @@ static void render_prepare_screen() {
     glUniform1i(texID, 0);
 }
 
-static void render_set_framebuffer(int* fb, GLuint program) {
+static void render_set_framebuffer(GLuint program) {
     // set framebuffer
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffers[*fb]);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffers[fb]);
     glViewport(0, 0, width, height); // Render on the whole framebuffer, complete from the lower left corner to the upper right
     // swap frame buffers
-    if(++(*fb) > 1) *fb = 0;
+    if(++fb > 1) fb = 0;
     // map the texture of the inactive framebuffer
     GLuint texID = glGetUniformLocation(program, "renderedTexture");
     // Bind our texture in Texture Unit -
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textures[*fb]);
+    glBindTexture(GL_TEXTURE_2D, textures[fb]);
     // Set our "renderedTexture" sampler to user Texture Unit 0
     glUniform1i(texID, 0);
 }
 
-void render() {
+static void render() {
     GLuint program;
     int i;
-    printf("\nStarted at %llu\n", get_time_us());
+    printf("\nRender: started at %llu\n", get_time_us());
     
     if(gen_starfield) {
         program = program_starfield;
         glUseProgram(program);
-        render_set_framebuffer(&fb, program);
+        render_set_framebuffer(program);
         
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(0);
@@ -191,7 +191,7 @@ void render() {
         while (rand() < RAND_MAX / 2) n++;
         // TODO: Could optimise this by only drawing regions which contain stars
         for (i = 0; i < n; i++) {
-            render_set_framebuffer(&fb, program);
+            render_set_framebuffer(program);
             int x = rand() % width, y = rand() % height;
             float radius = 1.f + scale * 0.005f + (rand() % scale) * 0.01f;
             printf("Position: %d, %d; Radius: %f\n", x, y, radius);
@@ -226,7 +226,7 @@ void render() {
         while (rand() < RAND_MAX / 2) n++;
         
         for(i = 0; i < n; i++) {
-            render_set_framebuffer(&fb, program);
+            render_set_framebuffer(program);
             float r = (float)rand() / RAND_MAX;
             float g = (float)rand() / RAND_MAX;
             float b = (float)rand() / RAND_MAX;
@@ -267,7 +267,7 @@ void render() {
         while (rand() < RAND_MAX / 20) n++;
         
         for(i = 0; i < n; i++) {
-            render_set_framebuffer(&fb, program);
+            render_set_framebuffer(program);
             int x = rand() % width, y = rand() % height;
             float r,g,b;
             if(rand() > RAND_MAX / 2) {
@@ -292,10 +292,71 @@ void render() {
         glDisableVertexAttribArray(0);
     }
     
-    printf("Finished at %llu\n", get_time_us());
+    printf("Render: finished at %llu\n", get_time_us());
     // swap framebuffer again so we get the final texture
     if(++fb > 1) fb = 0;
+}
+
+void save_to_png() {
+    int i;
+    uint8_t pixels[width * height * 3];
+    printf("PNG: started at %llu\n", get_time_us());
+    // copy pixels from screen
+    glBindTexture(GL_TEXTURE_2D, textures[fb]);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, width, height);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid *)pixels);
+    // use libpng to write the pixels to a png image
+    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png) goto png_fail;
+    png_infop info = png_create_info_struct(png);
+    if (!info) {
+        png_destroy_write_struct(&png, &info);
+        goto png_fail;
+    }
+    // filename => current time in milliseconds
+    char filename[256];
+    snprintf(filename, 256, "%llu.png", get_time_us() * 1000);
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        png_destroy_write_struct(&png, &info);
+        goto png_fail;
+    }
+    png_init_io(png, file);
+    png_set_IHDR(png, info, width, height, 8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE, 
+            PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+    png_colorp palette = png_malloc(png, PNG_MAX_PALETTE_LENGTH * sizeof(png_color));
+    if (!palette) {
+        fclose(file);
+        png_destroy_write_struct(&png, &info);
+        goto png_fail;
+    }
+    png_set_PLTE(png, info, palette, PNG_MAX_PALETTE_LENGTH);
+    png_write_info(png, info);
+    png_set_packing(png);
+    png_bytepp rows = (png_bytepp)png_malloc(png, height * sizeof(png_bytep));
+    for (i = 0; i < height; ++i) {
+        rows[i] = (png_bytep)(pixels + (height - i - 1) * width * 3);
+    }
+    png_write_image(png, rows);
+    png_write_end(png, info);
+    png_free(png, palette);
+    png_destroy_write_struct(&png, &info);
+    fclose(file);
+    printf("PNG: finished at %llu\n", get_time_us());
     
+    return;
+png_fail:
+    fail("Failed to create PNG\n");
+}
+
+void render_to_png() {
+    render();
+    save_to_png();
+}
+
+void render_to_screen() {
+    render();
     // get back into a state we can draw from
     render_prepare_screen();
 }

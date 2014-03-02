@@ -10,24 +10,42 @@ Uses GLSL to generate large images quickly, with the intention of generating wal
 Probably poorly coded as I've been learning OpenGL / GLSL along the way
 
 ==========
+###Usage:
 
-Currently generates stars and suns similarly to wwwtyro's, but the nebula generation currently is just simplex noise (can't use wwwtyro's recursive function in GLSL, and my attempt at an iterative solution resulted in this: http://i.imgur.com/CvMQHp3.png
+There's no commandline options yet, but if you build and run it,
 
-If you build and run it you can press space to generate a new image (possibly also leaking memory in the process, I haven't tested that)
+key    | action
+-------|------------------------
+space  | generate a new image
+s      | save the image as a PNG file
+escape | exit
+--------------------------------
 
 ==========
+###Example images:
 
-Examples of generated images:
+* http://i.imgur.com/tjmbSdL.png
+* http://i.imgur.com/yuasdnY.png
+* http://i.imgur.com/8hdpa5q.png
+* http://i.imgur.com/qMls9cT.png
+* http://i.imgur.com/auJYuCh.png
+* http://i.imgur.com/3d5Zovr.png
+
+Old:
 * http://i.imgur.com/nHVUcMD.png
 * http://i.imgur.com/Eeqzjv0.png
 * http://i.imgur.com/PM1vID0.png
 * http://i.imgur.com/2UkWn9K.png
 
-(The stars are currently too big and dark, and also the background stars shouldn't be showing through the nebula like that)
+==========
+
+Currently generates stars and suns similarly to wwwtyro's, but the nebula generation is completely different (and in most cases not as nice looking), because GLSL doesn't allow recursion
+
+The result of a failed attempt at writing an iterative version of wwwtyro's nebula generation function: http://i.imgur.com/CvMQHp3.png
 
 ==========
 
-TODO:
+###TODO:
 
 * Find a way to implement wwwtyro's nebula algorithm (or any algorithm which generates nice looking clouds) in GLSL
 * Add an option to run it headless and output an image file

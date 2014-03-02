@@ -27,7 +27,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        render();
+        render_to_screen();
+    }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+        save_to_png();
     }
 }
 
@@ -76,7 +79,7 @@ int main() {
     render_init();
 
     // Render to our framebuffer
-    render();
+    render_to_screen();
 
     while (!glfwWindowShouldClose(window)) {
 
