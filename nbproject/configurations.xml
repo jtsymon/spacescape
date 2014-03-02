@@ -4,28 +4,28 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>misc.h</itemPath>
-      <itemPath>render.h</itemPath>
-      <itemPath>shader.h</itemPath>
+      <itemPath>src/misc.h</itemPath>
+      <itemPath>src/render.h</itemPath>
+      <itemPath>src/shader.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>nebula1.frag</itemPath>
-      <itemPath>nebula2.frag</itemPath>
-      <itemPath>pass_through.vert</itemPath>
-      <itemPath>screen.frag</itemPath>
-      <itemPath>star.frag</itemPath>
-      <itemPath>starfield.frag</itemPath>
-      <itemPath>sun.frag</itemPath>
+      <itemPath>shaders/nebula1.frag</itemPath>
+      <itemPath>shaders/nebula2.frag</itemPath>
+      <itemPath>shaders/pass_through.vert</itemPath>
+      <itemPath>shaders/screen.frag</itemPath>
+      <itemPath>shaders/star.frag</itemPath>
+      <itemPath>shaders/starfield.frag</itemPath>
+      <itemPath>shaders/sun.frag</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>main.c</itemPath>
-      <itemPath>misc.c</itemPath>
-      <itemPath>render.c</itemPath>
-      <itemPath>shader.c</itemPath>
+      <itemPath>src/main.c</itemPath>
+      <itemPath>src/misc.c</itemPath>
+      <itemPath>src/render.c</itemPath>
+      <itemPath>src/shader.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -39,6 +39,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>src</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -56,33 +59,33 @@
           <commandLine>-lGL -lglfw -lGLEW -lm</commandLine>
         </linkerTool>
       </compileType>
-      <item path="main.c" ex="false" tool="0" flavor2="0">
+      <item path="shaders/nebula1.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="misc.c" ex="false" tool="0" flavor2="0">
+      <item path="shaders/nebula2.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="misc.h" ex="false" tool="3" flavor2="0">
+      <item path="shaders/pass_through.vert" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="nebula1.frag" ex="false" tool="3" flavor2="0">
+      <item path="shaders/screen.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="nebula2.frag" ex="false" tool="3" flavor2="0">
+      <item path="shaders/star.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="pass_through.vert" ex="false" tool="3" flavor2="0">
+      <item path="shaders/starfield.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="render.c" ex="false" tool="0" flavor2="0">
+      <item path="shaders/sun.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="render.h" ex="false" tool="3" flavor2="0">
+      <item path="src/main.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="screen.frag" ex="false" tool="3" flavor2="0">
+      <item path="src/misc.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="shader.c" ex="false" tool="0" flavor2="0">
+      <item path="src/misc.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="shader.h" ex="false" tool="3" flavor2="0">
+      <item path="src/render.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="star.frag" ex="false" tool="3" flavor2="0">
+      <item path="src/render.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="starfield.frag" ex="false" tool="3" flavor2="0">
+      <item path="src/shader.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="sun.frag" ex="false" tool="3" flavor2="0">
+      <item path="src/shader.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -108,33 +111,33 @@
           <commandLine>-lGL -lglfw -lGLEW -lm</commandLine>
         </linkerTool>
       </compileType>
-      <item path="main.c" ex="false" tool="0" flavor2="0">
+      <item path="shaders/nebula1.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="misc.c" ex="false" tool="0" flavor2="0">
+      <item path="shaders/nebula2.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="misc.h" ex="false" tool="3" flavor2="0">
+      <item path="shaders/pass_through.vert" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="nebula1.frag" ex="false" tool="3" flavor2="0">
+      <item path="shaders/screen.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="nebula2.frag" ex="false" tool="3" flavor2="0">
+      <item path="shaders/star.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="pass_through.vert" ex="false" tool="3" flavor2="0">
+      <item path="shaders/starfield.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="render.c" ex="false" tool="0" flavor2="0">
+      <item path="shaders/sun.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="render.h" ex="false" tool="3" flavor2="0">
+      <item path="src/main.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="screen.frag" ex="false" tool="3" flavor2="0">
+      <item path="src/misc.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="shader.c" ex="false" tool="0" flavor2="0">
+      <item path="src/misc.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="shader.h" ex="false" tool="3" flavor2="0">
+      <item path="src/render.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="star.frag" ex="false" tool="3" flavor2="0">
+      <item path="src/render.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="starfield.frag" ex="false" tool="3" flavor2="0">
+      <item path="src/shader.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="sun.frag" ex="false" tool="3" flavor2="0">
+      <item path="src/shader.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

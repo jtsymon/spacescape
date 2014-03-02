@@ -73,13 +73,13 @@ void render_init() {
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
     
-    vect_passthrough = create_shader("pass_through.vert", GL_VERTEX_SHADER);
-    frag_starfield = create_shader("starfield.frag", GL_FRAGMENT_SHADER);
-    frag_star = create_shader("star.frag", GL_FRAGMENT_SHADER);
-    frag_nebula1 = create_shader("nebula1.frag", GL_FRAGMENT_SHADER);
-    frag_nebula2 = create_shader("nebula2.frag", GL_FRAGMENT_SHADER);
-    frag_sun = create_shader("sun.frag", GL_FRAGMENT_SHADER);
-    frag_screen = create_shader("screen.frag", GL_FRAGMENT_SHADER);
+    vect_passthrough = create_shader("shaders/pass_through.vert", GL_VERTEX_SHADER);
+    frag_starfield = create_shader("shaders/starfield.frag", GL_FRAGMENT_SHADER);
+    frag_star = create_shader("shaders/star.frag", GL_FRAGMENT_SHADER);
+    frag_nebula1 = create_shader("shaders/nebula1.frag", GL_FRAGMENT_SHADER);
+    frag_nebula2 = create_shader("shaders/nebula2.frag", GL_FRAGMENT_SHADER);
+    frag_sun = create_shader("shaders/sun.frag", GL_FRAGMENT_SHADER);
+    frag_screen = create_shader("shaders/screen.frag", GL_FRAGMENT_SHADER);
     
     program_starfield = create_program(vect_passthrough, frag_starfield);
     program_star = create_program(vect_passthrough, frag_star);

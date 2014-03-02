@@ -35,10 +35,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/misc.o \
-	${OBJECTDIR}/render.o \
-	${OBJECTDIR}/shader.o
+	${OBJECTDIR}/src/main.o \
+	${OBJECTDIR}/src/misc.o \
+	${OBJECTDIR}/src/render.o \
+	${OBJECTDIR}/src/shader.o
 
 
 # C Compiler Flags
@@ -65,25 +65,25 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spacescape: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/spacescape ${OBJECTFILES} ${LDLIBSOPTIONS} -lGL -lglfw -lGLEW -lm
 
-${OBJECTDIR}/main.o: main.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/main.o: src/main.c 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.c
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main.o src/main.c
 
-${OBJECTDIR}/misc.o: misc.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/misc.o: src/misc.c 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/misc.o misc.c
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/misc.o src/misc.c
 
-${OBJECTDIR}/render.o: render.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/render.o: src/render.c 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/render.o render.c
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/render.o src/render.c
 
-${OBJECTDIR}/shader.o: shader.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/shader.o: src/shader.c 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/shader.o shader.c
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/shader.o src/shader.c
 
 # Subprojects
 .build-subprojects:
