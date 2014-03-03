@@ -23,8 +23,8 @@ extern GLuint program_screen;
 
 extern void render_init();
 extern void render_cleanup();
-extern void save_to_png();
-extern void render_to_png();
+extern void save_to_png(char* filename);
+extern void render_to_png(char* filename);
 extern void render_to_screen();
 
 #endif	/* RENDER_H */

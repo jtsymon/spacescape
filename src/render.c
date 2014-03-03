@@ -297,10 +297,10 @@ static void render() {
     if(++fb > 1) fb = 0;
 }
 
-void save_to_png() {
+void save_to_png(char* filename) {
     int i;
-    uint8_t pixels[width * height * 3];
-    printf("PNG: started at %llu\n", get_time_us());
+    // use malloc rather than the stack since an array of several million bytes will overflow the stack
+    uint8_t *pixels = malloc(width * height * 3 * sizeof(uint8_t));
     // switch the framebuffer in order to force the full texture to be saved
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffers[fb]);
     glViewport(0, 0, width, height);
@@ -318,9 +318,12 @@ void save_to_png() {
         png_destroy_write_struct(&png, &info);
         goto png_fail;
     }
-    // filename => current time in milliseconds
-    char filename[256];
-    snprintf(filename, 256, "%llu.png", get_time_us() * 1000);
+    if(filename == NULL) {
+        // filename => current time in milliseconds
+        char tmp[256];
+        snprintf(tmp, 256, "%llu.png", get_time_us() * 1000);
+        filename = tmp;
+    }
     FILE *file = fopen(filename, "wb");
     if (!file) {
         png_destroy_write_struct(&png, &info);
@@ -347,6 +350,7 @@ void save_to_png() {
     png_free(png, palette);
     png_destroy_write_struct(&png, &info);
     fclose(file);
+    free(pixels);
     printf("PNG: finished at %llu\n", get_time_us());
     render_prepare_screen();
     return;
@@ -354,9 +358,9 @@ png_fail:
     fail("Failed to create PNG\n");
 }
 
-void render_to_png() {
+void render_to_png(char* filename) {
     render();
-    save_to_png();
+    save_to_png(filename);
 }
 
 void render_to_screen() {
