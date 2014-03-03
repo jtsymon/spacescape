@@ -39,13 +39,12 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 static void print_help(int exitcode) {
     static char* options[] = {
         "-h, --help",                   "display this help and exit",
-        "-o, --output <name>",          "specify the file to output to\n                                    (default = <time>.png)",
-        "-f, --tofile",                 "output to a file and exit (implied by -o)",
-        "-s, --size   <width*height>",  "size of the image to generate\n                                    (default = 1920x1080)"
+        "-o, --output=[value]",         "no value  => save 1 image (to <timestamp>.png)\n                                int value => save $value images\n                                str value => save 1 image to filename $value",
+        "-s, --size=<width*height>",    "image size (default = 1920*1080)"
     };
     fprintf(stderr, "Spacescape options:\n");
     int i;
-    for(i = 0; i < 4; i++) {
+    for(i = 0; i < 3; i++) {
         fprintf(stderr, "  %-30s%s\n", options[i * 2], options[i * 2 + 1]);
     }
     end(exitcode);
@@ -54,88 +53,98 @@ static void print_help(int exitcode) {
 int main(int argc, char **argv) {
     
     int i;
-    bool tofile = false;
-    char* output = NULL;
+    int filecount = 0;
+    char* filename = NULL;
     
-    int c, option_index = 0;
-    static struct option long_options[] = {
-        {"help", 0, 0, 0},
-        {"output", 1, 0, 0},
-        {"tofile", 0, 0, 0},
-        {"size", 1, 0, 0},
-        {NULL, 0, NULL, 0}
-    };
-    bool fail = false;
-    bool help = false;
-    while ((c = getopt_long(argc, argv, "ho:fs:",
-            long_options, &option_index)) != -1) {
-        switch (c) {
-            case 0:
-                switch(option_index) {
-                case 0: // help
-                    goto help;
-                case 1: // output
-                    goto output;
-                case 2: // file
-                    goto tofile;
-                case 3: // size
-                    goto size;
+    {
+        int c, option_index = 0;
+        static struct option long_options[] = {
+            {"help", 0, 0, 0},
+            {"output", 2, 0, 0},
+            {"size", 1, 0, 0},
+            {NULL, 0, NULL, 0}
+        };
+        char* endptr = NULL;
+        bool opt_fail = false;
+        bool help = false;
+        while ((c = getopt_long(argc, argv, "ho::s:",
+                long_options, &option_index)) != -1) {
+            switch (c) {
+                case 0:
+                    switch(option_index) {
+                    case 0: // help
+                        goto help;
+                    case 1: // output
+                        goto output;
+                    case 2: // size
+                        goto size;
+                    default:
+                        goto unknown;
+                    }
+                    break;
+                help:
+                case 'h':   // help
+                    help = true;
+                    break;
+                output:
+                case 'o':   // output
+                    filecount = 1;
+                    // avoid leakiness if the user provided multiple --output
+                    // free(NULL) is a no-op, so this should be safe:
+                    free(filename);
+                    filename = NULL;
+                    if(optarg != NULL) {
+                        int tmp = strtol(optarg, &endptr, 10);
+                        if (endptr == optarg || (endptr != NULL && *endptr != '\0')) {
+                            int len = strlen(optarg);
+                            filename = malloc(len + 1);
+                            strcpy(filename, optarg);
+                            filename[len] = '\0';
+                        } else {
+                            filecount = tmp;
+                        }
+                    }
+                    break;
+                size:
+                case 's':
+                    i = 0;
+                    while(optarg[i] != '*' && optarg[i] != '\0') i++;
+                    if(optarg[i] == '\0') {
+                        goto size_fail;
+                    }
+                    optarg[i] = '\0';
+                    width = strtol(optarg, &endptr, 10);
+                    if (endptr == optarg || (endptr != NULL && *endptr != '\0')) {
+                        goto size_fail;
+                    }
+                    height = strtol(optarg + i + 1, &endptr, 10);
+                    if (endptr == optarg || (endptr != NULL && *endptr != '\0')) {
+                        goto size_fail;
+                    }
+                    printf("width: %d, height: %d\n", width, height);
+                    break;
+                size_fail:
+                    fprintf(stderr, "Invalid size string '%s'\n", optarg);
+                    print_help(1);
+                    break;
+                unknown:
+                case '?':
+                    opt_fail = true;
+                    break;
                 default:
-                    goto unknown;
-                }
-                break;
-            help:
-            case 'h':   // help
-                help = true;
-                break;
-            output:
-            case 'o':   // output
-                output = optarg;
-                // drop down to tofile, since we're outputting to a file
-            tofile:
-            case 'f':
-                tofile = true;
-                break;
-            size:
-            case 's':
-                i = 0;
-                while(optarg[i] != '*' && optarg[i] != '\0') i++;
-                if(optarg[i] == '\0') {
-                    goto size_fail;
-                }
-                optarg[i] = '\0';
-                char* err = NULL;
-                width = strtol(optarg, &err, 10);
-                if (err == optarg || (err != NULL && *err != '\0')) {
-                    goto size_fail;
-                }
-                height = strtol(optarg + i + 1, &err, 10);
-                if (err == optarg || (err != NULL && *err != '\0')) {
-                    goto size_fail;
-                }
-                printf("width: %d, height: %d\n", width, height);
-                break;
-            size_fail:
-                fprintf(stderr, "Invalid size string '%s'\n", optarg);
-                print_help(1);
-                break;
-            unknown:
-            case '?':
-                fail = true;
-                break;
-            default:
-                fprintf(stderr, "?? getopt returned character code 0%o ??\n", c);
+                    fprintf(stderr, "?? getopt returned character code 0%o ??\n", c);
+            }
         }
-    }
-    if(fail) {
-        print_help(1);
-    }
-    if(optind < argc) {
-        fprintf(stderr, "%s: unrecognized option '%s'\n", argv[0], argv[optind]);
-        print_help(1);
-    }
-    if(help) {
-        print_help(0);
+        if(opt_fail) {
+            print_help(1);
+        }
+        if(optind < argc) {
+            fprintf(stderr, "%s: unrecognized option '%s'\n", argv[0], argv[optind]);
+            print_help(1);
+        }
+        if(help) {
+            print_help(0);
+        }
     }
     
     scale = max(width, height);
@@ -156,7 +165,7 @@ int main(int argc, char **argv) {
 
 
     // Create a windowed mode window and its OpenGL context
-    if(tofile) {
+    if(filecount) {
         glfwWindowHint(GLFW_VISIBLE, false);
         window = glfwCreateWindow(1, 1, "SpaceScape", NULL, NULL);
     } else {
@@ -186,8 +195,12 @@ int main(int argc, char **argv) {
 
     render_init();
 
-    if(tofile) {
-        render_to_png(output);
+    if(filename) {
+        render_to_png(filename);
+    } else if(filecount) {
+        for(i = 0; i < filecount; i++) {
+            render_to_png(NULL);
+        }
     } else {
         // Render to our framebuffer
         render_to_screen();
